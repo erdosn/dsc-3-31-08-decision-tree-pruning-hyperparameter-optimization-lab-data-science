@@ -43,66 +43,26 @@ print (feat.head())
 print(target.head())
 ```
 
-
-    ---------------------------------------------------------------------------
-
-    FileNotFoundError                         Traceback (most recent call last)
-
-    <ipython-input-4-ec6017a367a5> in <module>()
-          1 # Load features and target variables
-    ----> 2 feat=pd.read_csv('features.csv')
-          3 target=pd.read_csv('target.csv')
-          4 print (feat.shape, target.shape)
-          5 print (feat.head())
-
-
-    /anaconda3/lib/python3.6/site-packages/pandas/io/parsers.py in parser_f(filepath_or_buffer, sep, delimiter, header, names, index_col, usecols, squeeze, prefix, mangle_dupe_cols, dtype, engine, converters, true_values, false_values, skipinitialspace, skiprows, nrows, na_values, keep_default_na, na_filter, verbose, skip_blank_lines, parse_dates, infer_datetime_format, keep_date_col, date_parser, dayfirst, iterator, chunksize, compression, thousands, decimal, lineterminator, quotechar, quoting, escapechar, comment, encoding, dialect, tupleize_cols, error_bad_lines, warn_bad_lines, skipfooter, doublequote, delim_whitespace, low_memory, memory_map, float_precision)
-        676                     skip_blank_lines=skip_blank_lines)
-        677 
-    --> 678         return _read(filepath_or_buffer, kwds)
-        679 
-        680     parser_f.__name__ = name
-
-
-    /anaconda3/lib/python3.6/site-packages/pandas/io/parsers.py in _read(filepath_or_buffer, kwds)
-        438 
-        439     # Create the parser.
-    --> 440     parser = TextFileReader(filepath_or_buffer, **kwds)
-        441 
-        442     if chunksize or iterator:
-
-
-    /anaconda3/lib/python3.6/site-packages/pandas/io/parsers.py in __init__(self, f, engine, **kwds)
-        785             self.options['has_index_names'] = kwds['has_index_names']
-        786 
-    --> 787         self._make_engine(self.engine)
-        788 
-        789     def close(self):
-
-
-    /anaconda3/lib/python3.6/site-packages/pandas/io/parsers.py in _make_engine(self, engine)
-       1012     def _make_engine(self, engine='c'):
-       1013         if engine == 'c':
-    -> 1014             self._engine = CParserWrapper(self.f, **self.options)
-       1015         else:
-       1016             if engine == 'python':
-
-
-    /anaconda3/lib/python3.6/site-packages/pandas/io/parsers.py in __init__(self, src, **kwds)
-       1706         kwds['usecols'] = self.usecols
-       1707 
-    -> 1708         self._reader = parsers.TextReader(src, **kwds)
-       1709 
-       1710         passed_names = self.names is None
-
-
-    pandas/_libs/parsers.pyx in pandas._libs.parsers.TextReader.__cinit__()
-
-
-    pandas/_libs/parsers.pyx in pandas._libs.parsers.TextReader._setup_parser_source()
-
-
-    FileNotFoundError: File b'features.csv' does not exist
+    (891, 13) (891, 1)
+       PassengerId   Age  SibSp  Parch     Fare  Pclass_1  Pclass_2  Pclass_3  \
+    0            1  22.0      1      0   7.2500         0         0         1   
+    1            2  38.0      1      0  71.2833         1         0         0   
+    2            3  26.0      0      0   7.9250         0         0         1   
+    3            4  35.0      1      0  53.1000         1         0         0   
+    4            5  35.0      0      0   8.0500         0         0         1   
+    
+       Sex_female  Sex_male  Embarked_C  Embarked_Q  Embarked_S  
+    0           0         1           0           0           1  
+    1           1         0           1           0           0  
+    2           1         0           0           0           1  
+    3           1         0           0           0           1  
+    4           0         1           0           0           1  
+       Survived
+    0         0
+    1         1
+    2         1
+    3         1
+    4         0
 
 
 This is great. Now that we have our x (feat) and y(target), we can go ahead and make a split necessary for supervised learning.
@@ -162,7 +122,7 @@ roc_auc
 
 
 
-    0.6990740740740741
+    0.7138055222088835
 
 
 
@@ -379,7 +339,7 @@ So now we shall use the best values from each training phase above and feed it b
 ```python
 # train a classifier with optimal values identified above
 dt = DecisionTreeClassifier(criterion='entropy',
-                           max_features=7,
+                           max_features=6,
                            max_depth=3,
                            min_samples_split=0.6,
                            min_samples_leaf=0.25)
@@ -392,14 +352,14 @@ roc_auc
 
 
 
-    0.7348379629629629
+    0.7294631710362046
 
 
 
 
 ```python
 # You observations here 
-# we moved from AUC 0.69 in the vanilla classifier to 0.73 some tuning. 
+# we moved from AUC 0.71 in the vanilla classifier to 0.73 some tuning. 
 # Due to randomness, results may slightly differ, there is some improvement in most cases. 
 # With more complicated datasets, we might see an even bigger improvement in AUC/accuracy of the classifier. 
 
